@@ -17,7 +17,7 @@ export default class publish extends Component {
               accounts: null,
     
               /////// NFT concern
-              NFTname: '',
+              valueNFTname: '',
     
               /////// Ipfs Upload
               buffer: null,
