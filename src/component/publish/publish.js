@@ -58,7 +58,7 @@ export default class publish extends Component {
         }
           
         onSubmit(event) {
-            const { web3, accounts, NFTBasic, NFTname } = this.state;
+            const { web3, accounts, BasicNFT, valueNFTName } = this.state;
     
             event.preventDefault()
     
@@ -69,7 +69,7 @@ export default class publish extends Component {
                 return
               }
               console.info(result)
-              const nftName = NFTname;
+              const nftName = valueNFTName;
               // In case of successful to upload to IPFS
               this.setState({ ipfsHash: result[0].hash });
               console.log('=== ipfsHash ===', this.state.ipfsHash);
@@ -80,24 +80,22 @@ export default class publish extends Component {
     
               //let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
               const ipfsHashOfPhoto = this.state.ipfsHash;
-              let PhotoNFT = {};
-              PhotoNFT = require("../../../build/contracts/NFTBasic.json");
-              PhotoNFT.methods.PreMint(nftName, ipfsHashOfPhoto).send({ from: accounts[0] })
+              
+              
+              BasicNFT.methods.preMint(nftName, ipfsHashOfPhoto).send({ from: accounts[0] })
               .once('receipt', (receipt) => {
                 console.log('=== receipt ===', receipt);
     
-                const PHOTO_NFT = receipt.events.PhotoNFTCreated.returnValues.photoNFT;
-                console.log('=== PHOTO_NFT ===', PHOTO_NFT);
+                // const PHOTO_NFT = receipt.events.PhotoNFTCreated.returnValues.photoNFT;
+                // console.log('=== PHOTO_NFT ===', PHOTO_NFT);
     
-                /// Get instance by using created photoNFT address
-                let BasicNFT = {};
-                PhotoNFT = require("../../../build/contracts/NFTBasic.json"); 
-                let photoNFT = new web3.eth.Contract(PhotoNFT.abi);
-                console.log('=== photoNFT ===', photoNFT);
-                const photoId = 1;
-                photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
+                // /// Get instance by using created photoNFT address
+                // PhotoNFT = require("../../../build/contracts/NFTBasic.json"); 
+                // let photoNFT = new web3.eth.Contract(PhotoNFT.abi);
+                // console.log('=== photoNFT ===', photoNFT);
+                // photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
                 
-                /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
+                // /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
 
               })
             })
@@ -198,7 +196,7 @@ export default class publish extends Component {
         }
         render()  {
             return (
-                <div><h1>publish</h1>
+                <div><h1>PUBLISHE THE NEXT WORLD WIDE NEWS!</h1>
                 <div >
                     <Grid container style={{ marginTop: 20 }}>
                         <Grid item xs={10}>
@@ -209,15 +207,15 @@ export default class publish extends Component {
                                   p={20} 
                                   borderColor={"#E8E8E8"}
                             >
-                                <h2>Publish and Put on Sale</h2>
-                                <p>Please upload your photo and put on sale from here!</p>
+                                <h2>Publish and Put on Auction from here</h2>
+                                <p>Please upload the next Coin coin and put on sale from here!</p>
     
                                 <Form onSubmit={this.onSubmit}>
-                                    <Field label="Photo NFT Name">
+                                    <Field label="Next Coin Name">
                                         <Input
                                             type="text"
                                             width={1}
-                                            placeholder="e.g) Art NFT Token"
+                                            placeholder="eg Where is GretaCoin"
                                             required={true}
                                             value={this.state.valueNFTName} 
                                             onChange={this.handleNFTName} 
@@ -237,7 +235,7 @@ export default class publish extends Component {
                                     </Field>
                                     */}
     
-                                    <Field label="Photo for uploading to IPFS">
+                                    <Field label="Coinasty next big news">
                                         <input 
                                             type='file' 
                                             onChange={this.captureFile} 
@@ -245,7 +243,7 @@ export default class publish extends Component {
                                         />
                                     </Field>
     
-                                    <Button size={'medium'} width={1} type='submit'>Upload my photo and put on sale</Button>
+                                    <Button size={'medium'} width={1} type='submit'>Upload the next Coin with the latest news</Button>
                                 </Form>
                             </Card>
                         </Grid>
