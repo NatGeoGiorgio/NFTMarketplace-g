@@ -7,12 +7,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./App.css";
 import publish from "./component/publish/publish.js";
 import Web3Info from "./component/utils/web3/web3info.js";
-//import './App.css';
+//import './App.css';imprt
+import Header from "./component/header/header.js";
 
 function App() {
   return (
     <Router>
-        <Navbar />
+      <Header />
         <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/MrktPlace' component={MrktPlace} />
@@ -27,7 +28,7 @@ function App() {
 export default App;
 
 // class App extends Component {
-//   constructor(props) {    
+//   constructor(props) {
 //     super(props);
 
 //     this.state = {
@@ -40,7 +41,7 @@ export default App;
 //     return (
 //       <div>
 //         <Home />
-//       </div>    
+//       </div>
 //     );
 //   }
 
@@ -48,7 +49,7 @@ export default App;
 //     return (
 //       <div>
 //         <MrktPlace />
-//       </div>    
+//       </div>
 //     );
 //   }
 
@@ -64,4 +65,3 @@ export default App;
 // }
 
 // export default App;
-

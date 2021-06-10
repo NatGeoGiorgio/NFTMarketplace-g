@@ -7,7 +7,7 @@ import {
   FooterLink,
   Heading,
 } from "./FooterStyles";
-  
+
 const Footer = () => {
   return (
     <Box>
@@ -16,7 +16,7 @@ const Footer = () => {
             <Heading>About Us</Heading>
             <FooterLink href="#">Aim</FooterLink>
             <FooterLink href="#">Vision</FooterLink>
-            <FooterLink href="#">Testimonials</FooterLink>
+            <FooterLink href="">Testimonials</FooterLink>
           </Column>
           <Column>
             <Heading>Social Media</Heading>

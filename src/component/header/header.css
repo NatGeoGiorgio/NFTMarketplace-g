@@ -1,0 +1,11 @@
+.giulio {
+  background: 'red';
+  height: 80px;
+  top: 0;
+
+}
+
+.container {
+    display: flex;
+    width:100%;
+}
