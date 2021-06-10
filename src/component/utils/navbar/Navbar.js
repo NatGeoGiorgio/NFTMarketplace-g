@@ -67,6 +67,9 @@ function Navbar() {
               MarketPlace
             </Link>
           </li>
+          <li className= 'nav-item'>
+          <Button />
+            </li>
           <li className='nav-item'>
             <Link
               to='/contact-us'
@@ -76,10 +79,10 @@ function Navbar() {
               Contact Us
             </Link>
           </li>
-          <li className='nav-item'>
-          < OnboardingButton/>
-          </li>
+          
         </ul>
+
+
 
       </nav>
     </>
