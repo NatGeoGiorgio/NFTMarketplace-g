@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { OnboardingButton } from "../utils/metamaskButton";
 export default class Home extends Component {
 
+
   render(){
   return (
 

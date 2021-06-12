@@ -13,12 +13,11 @@ export const Box = styled.div`
 `;
    
 export const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 1000px;
-    margin: 0 auto;
-    /* background: red; */
+clear: both;
+position: static;
+height: 200px;
+bottom:0;
+margin-top: -200px;
 `
    
 export const Column = styled.div`

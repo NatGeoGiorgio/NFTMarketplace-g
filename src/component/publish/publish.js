@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./publish.css";
 import getWeb3, { getGanacheWeb3, Web3 } from "../utils/web3/getWeb3.js";
 import ipfs from '../utils/ipfs/ipfsApi.js';
 import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
@@ -126,6 +127,7 @@ export default class publish extends Component {
     
                 // Use web3 to get the user's accounts.
                 const accounts = await web3.eth.getAccounts();
+                const currentAccount = accounts[0];
                 // Get the contract instance.
                 const networkId = await web3.eth.net.getId();
                 const networkType = await web3.eth.net.getNetworkType();
@@ -196,7 +198,7 @@ export default class publish extends Component {
         }
         render()  {
             return (
-                <div><h1>PUBLISHE THE NEXT WORLD WIDE NEWS!</h1>
+                <div className= 'container'><h1>PUBLISHE THE NEXT WORLD WIDE NEWS!</h1>
                 <div >
                     <Grid container style={{ marginTop: 20 }}>
                         <Grid item xs={10}>

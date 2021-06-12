@@ -3,31 +3,36 @@ pragma solidity >=0.7.0 <0.9.0;
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
-contract NFTBasic is ERC721,Ownable {
+contract NFTBasicV1 is ERC721,Ownable {
     
   mapping (uint256 => address) internal tokenOwner;
   uint constant minimumPrice = 0.01 ether;
   address contractOwner;
   constructor() public ERC721("Coinasty", "CNSTY"){contractOwner = msg.sender;}
-  
+
   struct Coin {
-    address owner;
     uint coinIndex;
     string nameOfCoin;
     string ipfsHash;
-    
-    bool isForSale;
-    uint minValueOffer;          // in ether
-    address onlySellTo;
-    
-    bool hasBid;
-    address bidder;
-    uint valueBid;
   }
-
   
+  struct Bid {
+        bool hasBid;
+        uint coinIndex;
+        address bidder;
+        uint value;
+    }
+  
+  struct Offer {
+        bool isForSale;
+        uint coinIndex;
+        address seller;
+        uint minValue;          // in ether
+        address onlySellTo;     // specify to sell only to a specific person
+    }
     
+    mapping (uint => Offer) public coinsOfferedForSale;
+    mapping (uint => Bid) public coinBids;
     mapping (address => uint) public pendingWithdrawals;
     Coin[] public coins;
     
@@ -40,25 +45,10 @@ contract NFTBasic is ERC721,Ownable {
   function preMint(string memory _nameOfCoin,string memory _ipfsHash)public{
       require (msg.sender==contractOwner);
       uint _coinId = coins.length;
-        Coin memory _coin= Coin({ 
-        owner: msg.sender,
-        coinIndex:_coinId, 
-        nameOfCoin: _nameOfCoin,
-        ipfsHash: _ipfsHash,
-        
-        isForSale: true,
-        minValueOffer:minimumPrice,
-        onlySellTo:address(0),
-        
-        hasBid: false,
-        bidder: address(0),
-        valueBid: 0
-        
-            
-        });
+        Coin memory _coin= Coin({ coinIndex:_coinId, nameOfCoin: _nameOfCoin ,ipfsHash: _ipfsHash});
         coins.push(_coin);
         _mint(msg.sender, _coinId);
-        offerCoinForSale(_coinId, minimumPrice );
+        offerCoinForSale(_coinId, minimumPrice);
   }
   
   
@@ -74,40 +64,34 @@ contract NFTBasic is ERC721,Ownable {
   
   function CoinNoLongerForSale(uint _coinIndex) public{
       if (ownerOf(_coinIndex) != msg.sender) revert();
-      coins[_coinIndex].isForSale = false;
-      coins[_coinIndex].minValueOffer= 0;
-      coins[_coinIndex].onlySellTo= address(0);
+      coinsOfferedForSale[_coinIndex] = Offer({ isForSale: false, coinIndex: _coinIndex , seller: msg.sender, minValue: 0, onlySellTo: address(0)});
       CoinNoMoreForSale(_coinIndex);
       
   }
   
   function offerCoinForSale(uint _coinIndex, uint minSalePriceInWei) public{
       if (ownerOf(_coinIndex) != msg.sender) revert();
-      coins[_coinIndex].isForSale= true;
-      coins[_coinIndex].minValueOffer= minSalePriceInWei ;
-      coins[_coinIndex].onlySellTo= address(0);
+      coinsOfferedForSale[_coinIndex] = Offer({ isForSale: true, coinIndex: _coinIndex , seller: msg.sender, minValue: minSalePriceInWei, onlySellTo: address(0)});
       CoinOffered(_coinIndex, minSalePriceInWei, address(0));
       
   }
   
   function offerCoinForSaleToAddress(uint _coinIndex, uint minSalePriceInWei,address toAddress) public{
       if (ownerOf(_coinIndex) != msg.sender) revert();
-      coins[_coinIndex].isForSale= true;
-      coins[_coinIndex].minValueOffer= minSalePriceInWei;
-      coins[_coinIndex].onlySellTo= toAddress;
+      coinsOfferedForSale[_coinIndex] = Offer({ isForSale: true, coinIndex: _coinIndex , seller: msg.sender, minValue: minSalePriceInWei, onlySellTo: toAddress});
       CoinOffered(_coinIndex, minSalePriceInWei, toAddress);
       
   }
   
   
   function buyCoin(uint _coinIndex) public payable{
-        Coin memory coin = coins[_coinIndex];
-        if (!coin.isForSale) revert();                // coin not actually for sale
-        if (coin.onlySellTo != address(0) && coin.onlySellTo != msg.sender) revert();  // coin not supposed to be sold to this user
-        if (msg.value < coin.minValueOffer) revert();      // Didn't send enough ETH
-        if (coin.owner != ownerOf(_coinIndex)) revert();
+        Offer memory offer = coinsOfferedForSale[_coinIndex];
+        if (!offer.isForSale) revert();                // coin not actually for sale
+        if (offer.onlySellTo != address(0) && offer.onlySellTo != msg.sender) revert();  // coin not supposed to be sold to this user
+        if (msg.value < offer.minValue) revert();      // Didn't send enough ETH
+        if (offer.seller != ownerOf(_coinIndex)) revert();
 
-        address seller = coin.owner;
+        address seller = offer.seller;
 
         _transfer(seller,msg.sender,_coinIndex);
         CoinNoLongerForSale(_coinIndex);
@@ -115,18 +99,17 @@ contract NFTBasic is ERC721,Ownable {
 
         // Check for the case where there is a bid from the new owner and refund it.
         // Any other bid can stay in place.
-        if (coin.bidder == msg.sender) {
+        Bid memory bid = coinBids[_coinIndex];
+        if (bid.bidder == msg.sender) {
             // Kill bid and refund value
-            pendingWithdrawals[msg.sender] += coin.valueBid;
-            coins[_coinIndex].hasBid=false;
-            coins[_coinIndex].bidder=address(0);
-            coins[_coinIndex].valueBid= 0;
+            pendingWithdrawals[msg.sender] += bid.value;
+            coinBids[_coinIndex] = Bid(false, _coinIndex, address(0), 0);
         }
   }
   
   function transferCoin(address to, uint _coinIndex) public{
         if (ownerOf(_coinIndex) != msg.sender) revert();                // coin not actually for sale
-        if (coins[_coinIndex].isForSale) {
+        if (coinsOfferedForSale[_coinIndex].isForSale) {
             CoinNoLongerForSale(_coinIndex);
         }
         
@@ -134,13 +117,11 @@ contract NFTBasic is ERC721,Ownable {
 
         // Check for the case where there is a bid from the new owner and refund it.
         // Any other bid can stay in place.
-        Coin memory coin = coins[_coinIndex];
-        if (coin.bidder == to) {
+        Bid memory bid = coinBids[_coinIndex];
+        if (bid.bidder == to) {
             // Kill bid and refund value
-            pendingWithdrawals[msg.sender] += coin.valueBid;
-            coins[_coinIndex].hasBid=false;
-            coins[_coinIndex].bidder= address(0);
-            coins[_coinIndex].valueBid=0;
+            pendingWithdrawals[msg.sender] += bid.value;
+            coinBids[_coinIndex] = Bid(false, _coinIndex, address(0), 0);
         }
   }
   function withdraw() public{
@@ -154,15 +135,13 @@ contract NFTBasic is ERC721,Ownable {
         if (ownerOf(_coinIndex) == address(0)) revert();
         if (ownerOf(_coinIndex) == msg.sender) revert();
         if (msg.value == 0) revert();
-        Coin memory existing = coins[_coinIndex];
-        if (msg.value <= existing.valueBid) revert();
-        if (existing.valueBid > 0) {
+        Bid memory existing = coinBids[_coinIndex];
+        if (msg.value <= existing.value) revert();
+        if (existing.value > 0) {
             // Refund the failing bid
-            pendingWithdrawals[existing.bidder] += existing.valueBid;
+            pendingWithdrawals[existing.bidder] += existing.value;
         }
-        coins[_coinIndex].hasBid=true; 
-        coins[_coinIndex].bidder= msg.sender; 
-        coins[_coinIndex].valueBid=msg.value;
+        coinBids[_coinIndex] = Bid(true, _coinIndex, msg.sender, msg.value);
         CoinBidEntered(_coinIndex, msg.value, msg.sender);
     }
     
@@ -170,33 +149,27 @@ contract NFTBasic is ERC721,Ownable {
                
         if (ownerOf(_coinIndex) != msg.sender) revert();
         address seller = msg.sender;
-        Coin memory coin = coins[_coinIndex];
-        if (coin.valueBid == 0) revert();
-        if (coin.valueBid < minPrice) revert();
+        Bid memory bid = coinBids[_coinIndex];
+        if (bid.value == 0) revert();
+        if (bid.value < minPrice) revert();
         
-        safeTransferFrom(msg.sender, coin.bidder, _coinIndex);
+        safeTransferFrom(msg.sender, bid.bidder, _coinIndex);
 
-        uint amount = coin.valueBid;
-        coins[_coinIndex].owner= coin.bidder;
-        coins[_coinIndex].isForSale=false;
-        coins[_coinIndex].hasBid=false;
-        coins[_coinIndex].bidder=address(0);
-        coins[_coinIndex].valueBid= 0;
-        coins[_coinIndex].onlySellTo=address(0);
+        coinsOfferedForSale[_coinIndex] = Offer(false, _coinIndex, bid.bidder, 0, address(0));
+        uint amount = bid.value;
+        coinBids[_coinIndex] = Bid(false, _coinIndex, address(0), 0);
         pendingWithdrawals[seller] += amount;
-        CoinBought(_coinIndex, coin.valueBid, seller, coin.bidder);
+        CoinBought(_coinIndex, bid.value, seller, bid.bidder);
     }
 
     function withdrawBidForCoin(uint _coinIndex) public{
         if (ownerOf(_coinIndex) == address(0)) revert();
         if (ownerOf(_coinIndex) == msg.sender) revert();
-        Coin memory coin = coins[_coinIndex];
-        if (coin.bidder != msg.sender) revert();
-        CoinBidWithdrawn(_coinIndex, coin.valueBid, msg.sender);
-        uint amount = coin.valueBid;
-        coins[_coinIndex].hasBid=false;
-        coins[_coinIndex].bidder=address(0);
-        coins[_coinIndex].valueBid=0;
+        Bid memory bid = coinBids[_coinIndex];
+        if (bid.bidder != msg.sender) revert();
+        CoinBidWithdrawn(_coinIndex, bid.value, msg.sender);
+        uint amount = bid.value;
+        coinBids[_coinIndex] = Bid(false, _coinIndex, address(0), 0);
         // Refund the bid money
         msg.sender.transfer(amount);
     }
@@ -222,7 +195,7 @@ contract NFTBasic is ERC721,Ownable {
         
         uint [] memory allCoinsOnSale = new uint[](totToken);
         for (uint i=0; i<totToken;i++){
-            if (coins[i].isForSale == true) allCoinsOnSale[i]=coins[i].coinIndex;
+            if (coinsOfferedForSale[i].isForSale == true) allCoinsOnSale[i]=coinsOfferedForSale[i].coinIndex;
              }
         return allCoinsOnSale;
  
@@ -231,6 +204,5 @@ contract NFTBasic is ERC721,Ownable {
     function getAllCoins() public view returns (Coin[] memory _coins) {
         return coins;
     }
-
     
 }

@@ -7,19 +7,21 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./App.css";
 import publish from "./component/publish/publish.js";
 import Web3Info from "./component/utils/web3/web3info.js";
+import myCoin from "./component/myCoin/myCoin.js";
 //import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router forceRefresh={true} >
         <Navbar />
         <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/MrktPlace' component={MrktPlace} />
         <Route path='/publish' component={publish} />
-        <Route path='/web3info' component={Web3Info} />
+        <Route  path='/web3info' component={Web3Info} />
+        <Route path='/myCoin' component={myCoin} />
         </Switch>
-        <Footer />
+        {/* <Footer /> */}
     </Router>
   );
 }
