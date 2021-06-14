@@ -7,7 +7,7 @@ export default class Home extends Component {
   return (
 
     <div className='header'>
-      Hello World!
+     ciao mondo
     </div>
 
    )
