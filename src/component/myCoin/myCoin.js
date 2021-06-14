@@ -217,16 +217,16 @@ export default class myCoin extends Component {
 
         return (
             <div>
-              <h2>My Coins</h2>
+              <h1 className='title'>Collection</h1>
 
               { allCoins.map((photo, key) => {
                 return (
-                  <div key={key} className="">
+                  
                     <div>
 
                         { currentAccount == photo.owner ? 
-                            <Card width={"500px"} 
-                                    maxWidth={"500px"} 
+                            <Card width={"300px"} 
+                                    maxWidth={"300px"} 
                                     mx={"auto"} 
                                     my={5} 
                                     p={20} 
@@ -234,8 +234,8 @@ export default class myCoin extends Component {
                             >
                               <Image
                                 alt="random unsplash image"
-                                borderRadius={8}
-                                height="100%"
+                                borderRadius={20}
+                                height="auto"
                                 maxWidth='100%'
                                 src={ `https://ipfs.io/ipfs/${photo.ipfsHash}` }
                               />
@@ -243,7 +243,7 @@ export default class myCoin extends Component {
                               <span style={{ padding: "20px" }}></span>
 
                               <p>Photo Name: { photo.nameOfCoin }</p>
-
+                            
                               <p>Owner: { photo.owner }</p>
 
                               <p>Photo id: { photo.coinIndex }</p>
@@ -265,7 +265,7 @@ export default class myCoin extends Component {
                         }
 
                     </div>
-                  </div>
+                  
                 )
               }) }
             </div>

@@ -56,7 +56,6 @@ function Navbar() {
             >
               web3info <i className='fas fa-caret-down' />
             </Link>
-            {dropdown && <Dropdown />}
           </li>
           <li className='nav-item'>
             <Link
