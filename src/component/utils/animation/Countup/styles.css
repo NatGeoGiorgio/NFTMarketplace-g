@@ -1,0 +1,31 @@
+Countup {
+    font-family: sans-serif;
+    text-align: center;
+    height: 100%;
+    min-height: 100vh;
+
+    
+  }
+  
+  .numberFormatContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .numberFormatContainer .numberFormatWrap {
+    position: relative;
+    height: 70px;
+    color: #6965db;
+    font-family: "Helvetica Neue", sans-serif;
+  }
+  
+  .Countup .smaller {
+    width: 100%;
+    margin-bottom: 50px;
+  }
+  
+  .Countup .bigger {
+    width: 100%;
+  }
+  

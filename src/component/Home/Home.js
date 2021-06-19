@@ -17,9 +17,6 @@ export default class Home extends Component {
           <Flex>
 
              <Image src={teatro} />
-              <Text>
-               Giorgio
-              </Text>
 
           </Flex>
           </div>

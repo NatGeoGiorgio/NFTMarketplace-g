@@ -8,6 +8,8 @@ import "./App.css";
 import publish from "./component/publish/publish.js";
 import Web3Info from "./component/utils/web3/web3info.js";
 import myCoin from "./component/myCoin/myCoin.js";
+import CoolAnimation from "./component/utils/animation/coolAnimation.js";
+import Countup from "./component/utils/animation/Countup/Countup.js";
 //import './App.css';
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
         <Route path='/publish' component={publish} />
         <Route  path='/web3info' component={Web3Info} />
         <Route path='/myCoin' component={myCoin} />
+        <Route path='/anim' component={CoolAnimation} />
+        {/* <Route path='/anim' component={Countup} /> */}
         </Switch>
         {/* <Footer /> */}
     </Router>
