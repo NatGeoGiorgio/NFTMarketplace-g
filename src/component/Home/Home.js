@@ -13,33 +13,12 @@ export default class Home extends Component {
   return (
    
           <div >
-            <div>
+           
           <Flex>
 
              <Image src={teatro} />
 
           </Flex>
-          </div>
-          <div>
-          <Flex>
-            <Card width={[ 256, 320 ]} mx='auto'>
-             <Image src={greta} />
-              <Text>
-               Giulio
-              </Text>
-            </Card>
-          </Flex>
-          </div>
-          <div>
-          <Flex>
-            <Card width={[ 256, 320 ]} mx='auto'>
-             <Image src={protest} />
-              <Text>
-               Giorgio
-              </Text>
-            </Card>
-          </Flex>
-          </div>
         </div>
     
         );

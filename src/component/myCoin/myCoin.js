@@ -97,6 +97,14 @@ export default class myCoin extends Component {
         this.setState({ allCoins: allCoins })
         return allCoins
     }
+    getAllDEMOCoins = async () => {
+        const { BasicNFT } = this.state
+        const allCoins = await BasicNFT.methods.getAllCoins().call()
+        console.log('=== allCoins ===', allCoins)
+
+        this.setState({ allCoins: allCoins })
+        return allCoins
+    }
 
 
     //////////////////////////////////// 

@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
 import { Transition, animated} from "react-spring";
 
-import "./styles.css";
+import "./countup.css";
 
 /**
  * List of separtors
  */
 const separators = [",", "."];
 
-/**
- * Renders an animated JS locale formatted number string
- */
-const AnimatedNumbers = ({
+// /**
+//  * Renders an animated JS locale formatted number string
+//  */
+ const AnimatedNumbers = ({
   value,
   fontSize,
   locale,
   formatOptions,
-  className
+  
 }) => {
   const valueStr = (Number(value) || Number(0)).toLocaleString(
     locale,
@@ -92,8 +92,8 @@ const AnimatedNumbers = ({
   );
 };
 
-
 export default class Countup extends Component {
+
   state = { value: 200 };
 
   incrementor = null;
@@ -129,7 +129,8 @@ export default class Countup extends Component {
 
     return (
       <div className="Countup">
-        <div className="smaller">
+        
+        <div >
           <AnimatedNumbers
             value={value}
             fontSize={16}
@@ -141,7 +142,7 @@ export default class Countup extends Component {
             }}
           />
         </div>
-        <div className="bigger">
+        <div>
           <AnimatedNumbers
             value={value}
             fontSize={100}
