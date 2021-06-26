@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'oldNewspaper';
+    src: url(./OldNewspaperTypes.ttf) format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' */
+  }

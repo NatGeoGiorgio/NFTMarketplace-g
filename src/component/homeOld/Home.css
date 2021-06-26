@@ -1,0 +1,14 @@
+
+@import "../utils/fonts/index.css";
+@import "../utils/fonts/indexChomsky.css";
+
+.title{
+  font-family: 'titleNewspaper';
+  font-size: 30px;
+  justify-content: center;
+}
+
+.body{
+  font-family: 'oldNewspaper';
+
+}
