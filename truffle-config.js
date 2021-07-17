@@ -2,11 +2,11 @@ require('dotenv').config();
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');  // @notice - Should use new module.
 const mnemonic = process.env.MNEMONIC;
-
+INFURA_API_KEY = process.env.INFURA_API_KEY;
 module.exports = {
   networks: {
     ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, 'https://ropsten.infura.io/v3/' + process.env.INFURA_KEY),
+      provider: () => new HDWalletProvider(mnemonic, 'https://ropsten.infura.io/v3/' + INFURA_API_KEY),
       network_id: '3',
       gas: 4712388,
       //gas: 4465030,          // Original
@@ -16,31 +16,31 @@ module.exports = {
       skipDryRun: true,        // Skip dry run before migrations? (default: false for public nets)
     },
     kovan: {
-      provider: () => new HDWalletProvider(mnemonic, 'https://kovan.infura.io/v3/' + process.env.INFURA_KEY),
+      provider: () => new HDWalletProvider(mnemonic, 'https://kovan.infura.io/v3/' + INFURA_API_KEY),
       network_id: '42',
       gas: 6465030,
       gasPrice: 5000000000, // 5 gwei
       skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets)
     },
     rinkeby: {
-      provider: () => new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/" + process.env.INFURA_KEY),
+      provider: () => new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/" + INFURA_API_KEY),
       network_id: 4,
       gas: 6000000,         // 2 times than before
       gasPrice: 5000000000, // 5 gwei,
       skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets)
-      //from: process.env.DEPLOYER_ADDRESS
+      //from: DEPLOYER_ADDRESS
     },
     goerli: {
-      provider: () => new HDWalletProvider(mnemonic, "https://goerli.infura.io/v3/" + process.env.INFURA_KEY),
+      provider: () => new HDWalletProvider(mnemonic, "https://goerli.infura.io/v3/" + INFURA_API_KEY),
       network_id: 5,
       gas: 7500000,
       gasPrice: 5000000000, // 5 gwei,
       skipDryRun: true,     // Skip dry run before migrations? (default: false for public nets)
-      //from: process.env.DEPLOYER_ADDRESS
+      //from: DEPLOYER_ADDRESS
     },
     // main ethereum network(mainnet)
     live: {
-      provider: () => new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/" + process.env.INFURA_KEY),
+      provider: () => new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/" + INFURA_API_KEY),
       network_id: 1,
       gas: 5500000,
       gasPrice: 2000000000 // 2 gwei

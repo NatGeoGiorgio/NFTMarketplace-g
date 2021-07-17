@@ -140,6 +140,7 @@ export default class MrktPlace extends Component {
               console.log('=== instanceBasicNFT ===', instanceBasicNFT);
             }
           }
+            
 
 
           if (instanceBasicNFT) {

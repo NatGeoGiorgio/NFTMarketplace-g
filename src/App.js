@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Home from "./component/homeOld/Home.js";
+import Home from "./component/Home/Home.js";
 import MrktPlace from "./component/MrktPlace/MrktPlace.js";
 import Navbar from "./component/utils/navbar/Navbar.js"
 import Footer from "./component/footer/Footer.js"

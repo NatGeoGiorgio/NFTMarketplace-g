@@ -1,11 +1,10 @@
 import Web3 from "web3";
 
-// require('dotenv').config();
-// const INFURA_API_KEY = process.env.INFURA_API_KEY;
-
-//const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'https://rinkeby.infura.io/v3/' + INFURA_API_KEY;    // Rinkeby
+ require('dotenv').config();
+ const INFURA_API_KEY = process.env.INFURA_API_KEY;
+const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'https://rinkeby.infura.io/v3/' + INFURA_API_KEY;    // Rinkeby
 //const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://0.0.0.0:7545';                                 // Ganache-GUI
-const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://127.0.0.1:7545';
+//const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://127.0.0.1:7545';
 
 
 const getWeb3 = () =>
@@ -49,9 +48,9 @@ const getGanacheWeb3 = () => {
     return null;
   }
   const provider = new Web3.providers.HttpProvider(
-    //'https://rinkeby.infura.io/v3/' + INFURA_API_KEY  // Rinkeby
+    'https://rinkeby.infura.io/v3/' + INFURA_API_KEY  // Rinkeby
     //'http://0.0.0.0:7545'  // Ganache-GUI
-    'http://127.0.0.1:7545'  // Ganache-CLI
+    //'http://127.0.0.1:7545'  // Ganache-CLI
   );
   const web3 = new Web3(provider);
   console.log("No local ganache found.");

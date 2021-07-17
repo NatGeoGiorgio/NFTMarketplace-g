@@ -78,14 +78,13 @@ export default class publish extends Component {
               this.setState({ 
                 valueNFTName: '',
               });
-    
+            
               //let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
               const ipfsHashOfPhoto = this.state.ipfsHash;
               
               
               BasicNFT.methods.preMint(nftName, ipfsHashOfPhoto).send({ from: accounts[0] })
-              .once('receipt', (receipt) => {
-                console.log('=== receipt ===', receipt);
+            })
     
                 // const PHOTO_NFT = receipt.events.PhotoNFTCreated.returnValues.photoNFT;
                 // console.log('=== PHOTO_NFT ===', PHOTO_NFT);
@@ -98,9 +97,11 @@ export default class publish extends Component {
                 
                 // /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
 
-              })
-            })
-        }  
+            
+              
+          }
+
+          
 
         componentDidMount = async () => {
             const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
@@ -150,6 +151,8 @@ export default class publish extends Component {
                     console.log('=== instanceBasicNFT ===', instanceBasicNFT);
                   }
                 }
+                  
+                
 
     
                 if (instanceBasicNFT) {
